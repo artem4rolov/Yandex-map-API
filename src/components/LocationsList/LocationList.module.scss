@@ -1,0 +1,39 @@
+.locationList {
+  flex: 1;
+  display: flex;
+  max-width: 500px;
+  justify-content: start;
+  flex-direction: column;
+  gap: 10px;
+  height: 200px;
+  // overflow-y: hidden;
+  // overflow: hidden;
+  overflow-y: auto;
+
+  .locationItem {
+    background: #3a3d3e;
+    color: #969c9f;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 18px;
+    word-break: break-all;
+
+    &:hover {
+      background: #404749;
+    }
+
+    .locationBudgetList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: start;
+      gap: 10px;
+      margin-top: 10px;
+
+      .locationBudget {
+        background: #282c2d;
+        padding: 5px;
+        font-size: 12px;
+      }
+    }
+  }
+}
