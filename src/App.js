@@ -8,11 +8,18 @@ import { uploadLocations } from "./redux/slices/locationActions";
 
 function App() {
   const dispatch = useDispatch();
+  const [coordinates, setCoordinates] = React.useState(null);
   const { loading } = useSelector((state) => state.points);
 
+  // получаем список магазинов
   React.useEffect(() => {
     dispatch(uploadLocations());
   }, [dispatch]);
+
+  // принимаем координаты точки магазина от компонента LocationList и заносим их в стейт, затем передаем их компоненту PlaceOnMap
+  const changePoint = (XandY) => {
+    setCoordinates(XandY);
+  };
 
   return (
     <div className={styles.app}>
@@ -21,8 +28,8 @@ function App() {
         "loading..."
       ) : (
         <div className={styles.appContent}>
-          <LocationList />
-          <PlaceOnMap />
+          <LocationList choosePoint={changePoint} />
+          <PlaceOnMap coordinates={coordinates ? coordinates : null} />
         </div>
       )}
     </div>
