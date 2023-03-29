@@ -8,6 +8,7 @@ const initialState = {
   error: null,
   currentPoint: [55.320255, 58.769415],
   currentAddress: null,
+  filterCoordinates: null,
 };
 
 const locationsSlice = createSlice({
@@ -21,6 +22,30 @@ const locationsSlice = createSlice({
     // задаем адрес выбранной точки
     setAddress: (state, action) => {
       state.currentAddress = action.payload;
+    },
+    // фильтр магазинов по городам
+    setFilter: (state, action) => {
+      switch (action.payload) {
+        case "Все города":
+          state.filterCoordinates = null;
+          break;
+
+        case "Уфа":
+          state.filterCoordinates = [54, 55];
+          break;
+
+        case "Екатеринбург":
+          state.filterCoordinates = [56, 60];
+          break;
+
+        case "Салават":
+          state.filterCoordinates = [53, 55];
+          break;
+
+        default:
+          state.filterCoordinates = null;
+          break;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -44,4 +69,4 @@ const locationsSlice = createSlice({
 
 export default locationsSlice.reducer;
 
-export const { setPoint, setAddress } = locationsSlice.actions;
+export const { setPoint, setAddress, setFilter } = locationsSlice.actions;

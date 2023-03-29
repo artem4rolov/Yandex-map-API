@@ -15,7 +15,9 @@ const PlaceOnMap = () => {
   const dispatch = useDispatch();
 
   const { points } = useSelector((state) => state.points);
-  const { currentPoint, currentAddress } = useSelector((state) => state.points);
+  const { currentPoint, currentAddress, filterCoordinates } = useSelector(
+    (state) => state.points
+  );
 
   const map = useRef();
 
@@ -37,6 +39,8 @@ const PlaceOnMap = () => {
       myPanTo(currentPoint, currentAddress);
     }
   }, [currentPoint]);
+
+  console.log(filterCoordinates);
 
   return (
     <YMaps>
