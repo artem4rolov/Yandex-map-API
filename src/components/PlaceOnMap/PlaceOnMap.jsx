@@ -6,20 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAddress, setPoint } from "../../redux/slices/locationsSlice";
 
 const PlaceOnMap = () => {
-  const defaultState = {
+  const dispatch = useDispatch();
+
+  const { points, currentPoint, currentAddress, filterCoordinates } =
+    useSelector((state) => state.points);
+
+  const map = useRef();
+
+  let defaultState = {
     center: [55.320255, 58.769415],
     zoom: 6,
     controls: ["zoomControl", "fullscreenControl"],
   };
-
-  const dispatch = useDispatch();
-
-  const { points } = useSelector((state) => state.points);
-  const { currentPoint, currentAddress, filterCoordinates } = useSelector(
-    (state) => state.points
-  );
-
-  const map = useRef();
 
   // функция для позиционирования карты по координатам
   const myPanTo = (coordinates, address) => {
@@ -29,6 +27,7 @@ const PlaceOnMap = () => {
     // предварительно проверяем, что координаты есть
     // в противном случае показываем дефолтную точку из defaultState
     if (coordinates) {
+      map.current.setZoom(14, { duration: 2000 });
       map.current.panTo(coordinates);
     }
   };
@@ -40,7 +39,17 @@ const PlaceOnMap = () => {
     }
   }, [currentPoint]);
 
-  console.log(filterCoordinates);
+  // если выбран город из списка - позиционируем карту на город
+  React.useEffect(() => {
+    if (filterCoordinates) {
+      map.current.setZoom(12, { duration: 2000 });
+      map.current.panTo(filterCoordinates);
+      // если город не выбран - отдаляем карту на все города (которые доступны в тестовом задании)
+    } else if (map.current) {
+      map.current.setZoom(6, { duration: 2000 });
+      map.current.panTo([55.320255, 58.769415], null);
+    }
+  }, [filterCoordinates]);
 
   return (
     <YMaps>
@@ -59,8 +68,7 @@ const PlaceOnMap = () => {
                 key={address}
                 geometry={[latitude, longitude]}
                 properties={{
-                  balloonContentBody:
-                    "This is balloon loaded by the Yandex.Maps API module system",
+                  iconCaption: address,
                 }}
                 onClick={() => {
                   myPanTo([latitude, longitude], address);

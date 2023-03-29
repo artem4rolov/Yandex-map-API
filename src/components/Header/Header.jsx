@@ -17,7 +17,7 @@ const Header = () => {
       ...styles,
       width: "200px",
       boxShadow: "2px 2px 2px rgba(33, 33, 33, 0.1)",
-      borderRadius: "4px",
+      borderRadius: "0px",
     }),
     option: (styles) => {
       return { ...styles };

@@ -24,6 +24,7 @@ const locationsSlice = createSlice({
       state.currentAddress = action.payload;
     },
     // фильтр магазинов по городам
+    // у каждого города первые цифры координат (целые числа) совпадают с координатами (целыми числами) первых чисел магазинов этого города
     setFilter: (state, action) => {
       switch (action.payload) {
         case "Все города":
@@ -31,15 +32,15 @@ const locationsSlice = createSlice({
           break;
 
         case "Уфа":
-          state.filterCoordinates = [54, 55];
+          state.filterCoordinates = [54.734853, 55.9578647];
           break;
 
         case "Екатеринбург":
-          state.filterCoordinates = [56, 60];
+          state.filterCoordinates = [56.8386326, 60.6054887];
           break;
 
         case "Салават":
-          state.filterCoordinates = [53, 55];
+          state.filterCoordinates = [53.3616311, 55.9245559];
           break;
 
         default:
