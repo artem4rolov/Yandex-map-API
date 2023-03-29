@@ -12,6 +12,22 @@ const LocationList = () => {
     (state) => state.points
   );
 
+  function arraysEqual(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    // If you don't care about the order of the elements inside
+    // the array, you should sort both arrays here.
+    // Please note that calling sort on an array will modify that array.
+    // you might want to clone your array first.
+
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
+
   // делаем активным текущий выбранный магазин
   React.useEffect(() => {
     if (currentAddress) {
@@ -27,16 +43,47 @@ const LocationList = () => {
 
   return (
     <div className={styles.locationList}>
-      {points &&
-        points.map((item) => {
-          const { address, budgets, latitude, longitude } = item;
+      {points && !filterCoordinates
+        ? points.map((item) => {
+            const { address, budgets, latitude, longitude } = item;
 
-          console.log([Math.trunc(latitude), Math.trunc(longitude)]);
+            return (
+              <div
+                key={address}
+                className={`${styles.locationItem} ${
+                  active === address ? styles.active : ""
+                }`}
+                onClick={() => {
+                  setActive(address);
+                  selectPoints([latitude, longitude], address);
+                }}
+              >
+                <span className={styles.location__adress}>{address}</span>
+                <div className={styles.locationBudgetList}>
+                  {budgets &&
+                    budgets.map((item) => (
+                      <span key={item} className={styles.locationBudget}>
+                        {item}
+                      </span>
+                    ))}
+                </div>
+              </div>
+            );
+          })
+        : filterCoordinates &&
+          points.map((item) => {
+            const { address, budgets, latitude, longitude } = item;
 
-          if (filterCoordinates) {
+            // console.log(
+            //   JSON.parse([Math.trunc(latitude), Math.trunc(longitude)]) ===
+            //     JSON.parse(filterCoordinates)
+            // );
+
             if (
-              [Math.trunc(latitude), Math.trunc(longitude)] ===
-              filterCoordinates
+              arraysEqual(
+                [Math.trunc(latitude), Math.trunc(longitude)],
+                filterCoordinates
+              )
             ) {
               return (
                 <div
@@ -61,31 +108,9 @@ const LocationList = () => {
                 </div>
               );
             }
-          }
 
-          return (
-            <div
-              key={address}
-              className={`${styles.locationItem} ${
-                active === address ? styles.active : ""
-              }`}
-              onClick={() => {
-                setActive(address);
-                selectPoints([latitude, longitude], address);
-              }}
-            >
-              <span className={styles.location__adress}>{address}</span>
-              <div className={styles.locationBudgetList}>
-                {budgets &&
-                  budgets.map((item) => (
-                    <span key={item} className={styles.locationBudget}>
-                      {item}
-                    </span>
-                  ))}
-              </div>
-            </div>
-          );
-        })}
+            return null;
+          })}
     </div>
   );
 };
