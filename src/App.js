@@ -4,6 +4,7 @@ import styles from "./App.module.scss";
 import Header from "./components/Header/Header";
 import LocationList from "./components/LocationsList/LocationList";
 import PlaceOnMap from "./components/PlaceOnMap/PlaceOnMap";
+import Loading from "./components/Loading/Loading";
 import { uploadLocations } from "./redux/slices/locationActions";
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
     <div className={styles.app}>
       <Header />
       {loading ? (
-        "loading..."
+        <Loading />
       ) : (
         <div className={styles.appContent}>
           <LocationList />

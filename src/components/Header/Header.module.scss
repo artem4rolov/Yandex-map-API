@@ -1,7 +1,11 @@
 .header {
   width: 100%;
   max-width: 1000px;
-  select {
-    width: 100px;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    // width: 100%;
+    max-width: 500px;
   }
 }
