@@ -16,11 +16,6 @@ function App() {
     dispatch(uploadLocations());
   }, [dispatch]);
 
-  // принимаем координаты точки магазина от компонента LocationList и заносим их в стейт, затем передаем их компоненту PlaceOnMap
-  const changePoint = (XandY) => {
-    setCoordinates(XandY);
-  };
-
   return (
     <div className={styles.app}>
       <Header />
@@ -28,8 +23,8 @@ function App() {
         "loading..."
       ) : (
         <div className={styles.appContent}>
-          <LocationList choosePoint={changePoint} />
-          <PlaceOnMap coordinates={coordinates ? coordinates : null} />
+          <LocationList />
+          <PlaceOnMap />
         </div>
       )}
     </div>

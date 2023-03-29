@@ -2,35 +2,41 @@ import React, { useRef } from "react";
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 
 import styles from "./PlaceOnMap.module.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setAddress, setPoint } from "../../redux/slices/locationsSlice";
 
-const PlaceOnMap = ({ coordinates }) => {
+const PlaceOnMap = () => {
   const defaultState = {
     center: [55.320255, 58.769415],
     zoom: 6,
     controls: ["zoomControl", "fullscreenControl"],
   };
 
+  const dispatch = useDispatch();
+
   const { points } = useSelector((state) => state.points);
+  const { currentPoint, currentAddress } = useSelector((state) => state.points);
 
   const map = useRef();
 
   // функция для позиционирования карты по координатам
-  const myPanTo = (coordinates) => {
+  const myPanTo = (coordinates, address) => {
+    // если тыкаем на значок на карте, задаем новую локацию и адрес в store
+    dispatch(setPoint(coordinates));
+    dispatch(setAddress(address));
     // предварительно проверяем, что координаты есть
     // в противном случае показываем дефолтную точку из defaultState
     if (coordinates) {
       map.current.panTo(coordinates);
-      // map.current.
     }
   };
 
   // при получении координат точки - позиционируем карту на эту точку
   React.useEffect(() => {
-    myPanTo(coordinates);
-  }, [coordinates]);
-
-  // console.log(coordinates);
+    if (currentPoint && currentAddress) {
+      myPanTo(currentPoint, currentAddress);
+    }
+  }, [currentPoint]);
 
   return (
     <YMaps>
@@ -53,7 +59,7 @@ const PlaceOnMap = ({ coordinates }) => {
                     "This is balloon loaded by the Yandex.Maps API module system",
                 }}
                 onClick={() => {
-                  console.log([latitude, longitude]);
+                  myPanTo([latitude, longitude], address);
                 }}
               />
             );

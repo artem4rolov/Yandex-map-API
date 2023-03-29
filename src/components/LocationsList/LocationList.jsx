@@ -1,20 +1,25 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setAddress, setPoint } from "../../redux/slices/locationsSlice";
 
 import styles from "./LocationList.module.scss";
 
-const LocationList = ({ choosePoint }) => {
+const LocationList = () => {
   const [active, setActive] = React.useState(null);
+  const dispatch = useDispatch();
 
   const { points } = useSelector((state) => state.points);
+  const { currentAddress } = useSelector((state) => state.points);
 
   React.useEffect(() => {
-    // console.log(points);
-  }, [points]);
+    if (currentAddress) {
+      setActive(currentAddress);
+    }
+  }, [currentAddress]);
 
-  const selectPoints = (params) => {
-    choosePoint(params);
-    // console.log(params);
+  const selectPoints = (params, address) => {
+    dispatch(setPoint(params));
+    dispatch(setAddress(address));
   };
 
   return (
@@ -31,8 +36,7 @@ const LocationList = ({ choosePoint }) => {
               }`}
               onClick={() => {
                 setActive(address);
-                selectPoints([latitude, longitude]);
-                // console.log([latitude, longitude]);
+                selectPoints([latitude, longitude], address);
               }}
             >
               <span className={styles.location__adress}>{address}</span>
