@@ -9,7 +9,6 @@ import { uploadLocations } from "./redux/slices/locationActions";
 
 function App() {
   const dispatch = useDispatch();
-  const [coordinates, setCoordinates] = React.useState(null);
   const { loading } = useSelector((state) => state.points);
 
   // получаем список магазинов

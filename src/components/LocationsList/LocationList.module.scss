@@ -4,7 +4,7 @@
   justify-content: start;
   flex-direction: column;
   gap: 10px;
-  height: 500px;
+  max-height: 500px;
   overflow-y: auto;
 
   .locationItem {
@@ -42,14 +42,14 @@
 
 @media (max-width: 1024px) {
   .locationList {
-    height: 300px;
+    max-height: 300px;
     // width: 100%;
   }
 }
 
 @media (max-width: 510px) {
   .locationList {
-    height: 250px;
+    max-height: 250px;
     width: 100%;
   }
 }

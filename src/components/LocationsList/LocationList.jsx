@@ -1,12 +1,11 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setAddress, setPoint } from "../../redux/slices/locationsSlice";
+import { useSelector } from "react-redux";
+import LocationItem from "./LocationItem/LocationItem";
 
 import styles from "./LocationList.module.scss";
 
 const LocationList = () => {
   const [active, setActive] = React.useState(null);
-  const dispatch = useDispatch();
 
   const { points, currentAddress, filterCoordinates } = useSelector(
     (state) => state.points
@@ -32,12 +31,6 @@ const LocationList = () => {
     }
   }, [currentAddress]);
 
-  // при клике на конкретный магазин в списке - задаем его адрес и координаты в redux store
-  const selectPoints = (params, address) => {
-    dispatch(setPoint(params));
-    dispatch(setAddress(address));
-  };
-
   // рендер будет отличаться, если выбран город
   return (
     <div className={styles.locationList}>
@@ -45,35 +38,23 @@ const LocationList = () => {
         // если выбраны все города - в списке будут все магазины
         points && !filterCoordinates
           ? points.map((item) => {
-              const { address, budgets, latitude, longitude } = item;
+              const { address } = item;
 
               return (
-                <div
+                <LocationItem
                   key={address}
-                  className={`${styles.locationItem} ${
-                    active === address ? styles.active : ""
-                  }`}
+                  active={active}
                   onClick={() => {
                     setActive(address);
-                    selectPoints([latitude, longitude], address);
                   }}
-                >
-                  <span className={styles.location__adress}>{address}</span>
-                  <div className={styles.locationBudgetList}>
-                    {budgets &&
-                      budgets.map((item) => (
-                        <span key={item} className={styles.locationBudget}>
-                          {item}
-                        </span>
-                      ))}
-                  </div>
-                </div>
+                  {...item}
+                />
               );
             })
           : // если выбран город - в списке будут только магазины этого города
             filterCoordinates &&
             points.map((item) => {
-              const { address, budgets, latitude, longitude } = item;
+              const { address, latitude, longitude } = item;
 
               if (
                 arraysEqual(
@@ -82,26 +63,14 @@ const LocationList = () => {
                 )
               ) {
                 return (
-                  <div
+                  <LocationItem
                     key={address}
-                    className={`${styles.locationItem} ${
-                      active === address ? styles.active : ""
-                    }`}
+                    active={active}
                     onClick={() => {
                       setActive(address);
-                      selectPoints([latitude, longitude], address);
                     }}
-                  >
-                    <span className={styles.location__adress}>{address}</span>
-                    <div className={styles.locationBudgetList}>
-                      {budgets &&
-                        budgets.map((item) => (
-                          <span key={item} className={styles.locationBudget}>
-                            {item}
-                          </span>
-                        ))}
-                    </div>
-                  </div>
+                    {...item}
+                  />
                 );
               }
 

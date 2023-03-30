@@ -4,6 +4,7 @@ import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 import styles from "./PlaceOnMap.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { setAddress, setPoint } from "../../redux/slices/locationsSlice";
+import { FaArrowUp } from "react-icons/fa";
 
 const PlaceOnMap = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,16 @@ const PlaceOnMap = () => {
       map.current.setZoom(14, { duration: 2000 });
       map.current.panTo(coordinates);
     }
+  };
+
+  // функция скролла страницы наверх
+  const scrollTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+      /* you can also use 'auto' behaviour
+         in place of 'smooth' */
+    });
   };
 
   // при получении координат точки - позиционируем карту на эту точку
@@ -76,6 +87,9 @@ const PlaceOnMap = () => {
               />
             );
           })}
+        <div className={styles.appButtonUp} onClick={scrollTop}>
+          <FaArrowUp />
+        </div>
       </Map>
     </YMaps>
   );
